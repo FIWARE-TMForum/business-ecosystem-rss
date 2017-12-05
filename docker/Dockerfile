@@ -1,37 +1,27 @@
 FROM ubuntu:16.04
 
-RUN apt-get update
-RUN apt-get install -y unzip wget python2.7 python-pip git maven mysql-client openjdk-8-jdk
+MAINTAINER CoNWeT Lab. Universidad Politécnica de Madrid
 
-# Download and install glassfish
-RUN wget http://download.java.net/glassfish/4.1/release/glassfish-4.1.zip
-RUN unzip glassfish-4.1.zip
+ENV VERSION develop
 
-# Download the mysql connector and place it in the proper directory
-RUN wget http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.39.tar.gz
-
-RUN tar -xvf mysql-connector-java-5.1.39.tar.gz
-
-RUN cp ./mysql-connector-java-5.1.39/mysql-connector-java-5.1.39-bin.jar glassfish4/glassfish/domains/domain1/lib
-
-RUN pip install sh
-
-# Download RSS Code
-RUN git clone https://github.com/FIWARE-TMForum/business-ecosystem-rss.git
+RUN apt-get update && apt-get install -y python2.7 git maven python-pip mysql-client openjdk-8-jdk wget unzip && \
+    pip install sh && \
+    wget http://download.java.net/glassfish/4.1/release/glassfish-4.1.zip && \
+    unzip glassfish-4.1.zip && \
+    wget http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.39.tar.gz && \
+    tar -xvf mysql-connector-java-5.1.39.tar.gz && \
+    cp ./mysql-connector-java-5.1.39/mysql-connector-java-5.1.39-bin.jar glassfish4/glassfish/domains/domain1/lib && \
+    git clone https://github.com/FIWARE-TMForum/business-ecosystem-rss.git
 
 WORKDIR business-ecosystem-rss
 
-RUN git checkout develop
+RUN git checkout $VERSION
 
-# Create WAR file
-RUN mvn install -DskipTests
+RUN mvn install -DskipTests && \
+    mkdir /etc/default/rss/
 
-RUN mkdir /etc/default/rss/
-
-# Set properties files
-COPY database.properties /etc/default/rss/database.properties
-
-COPY oauth.properties /etc/default/rss/oauth.properties
+# Set volume for property files
+VOLUME /etc/default/rss
 
 COPY ./entrypoint.py /
 COPY ./entrypoint.sh /
