@@ -23,7 +23,6 @@ RUN mvn install -DskipTests && \
 # Set volume for property files
 VOLUME /etc/default/rss
 
-COPY ./entrypoint.py /
 COPY ./entrypoint.sh /
 
 EXPOSE 8080 4848 8181
