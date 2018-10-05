@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +44,14 @@ public class AppProperties {
     private final String filename;
 
     /**
-     * Filename of properties.
+     * Environment variable hashmap
      */
+
+    private HashMap<String, String> envTable = new HashMap<String, String>();
+    
+    /**
+     * Filename of properties.
+     nnnnnn*/
     private Properties props;
 
     /**
@@ -54,7 +61,8 @@ public class AppProperties {
      */
     public AppProperties(final String filename) {
         this.filename = filename;
-        this.loadProperties();
+        // this.loadProperties();
+	this.associatePropsToEnv();
     }
 
     /**
@@ -71,6 +79,21 @@ public class AppProperties {
         return props;
     }
 
+    /**
+     * Associates old config/database names to environment variables
+     */
+    
+    private void associatePropsToEnv() {
+	this.envTable.add("config.aggregatorRole", System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE"));
+	this.envTable.add("config.grantedRole", System.getenv("BAE_RSS_OAUTH_CONFIG_GRANTEDROLE"));
+	this.envTable.add("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
+	this.envTable.add("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
+	this.envTable.add("database.url", System.getenv("BAE_RSS_DATABASE_URL"));
+	this.envTable.add("database.username", System.getenv("BAE_RSS_DATABASE_USERNAME"));
+	this.envTable.add("database.password", System.getenv("BAE_RSS_DATABASE_PASSWORD"));
+	this.envTable.add("database.driverClassName", System.getenv("BAE_RSS_DATABASE_DRIVERCLASSNAME"));
+    }
+    
     /**
      * @param props
      *            the props to set
@@ -96,10 +119,10 @@ public class AppProperties {
      */
     public String getProperty(final String key) {
         AppProperties.logger.debug("Into getProperty()");
-        if (props == null) {
-            this.loadProperties();
-        }
-        return props.getProperty(key);
+        // if (props == null) {
+        //     this.loadProperties();
+        // }
+        return envTable.get(key);
     }
 
     /**
