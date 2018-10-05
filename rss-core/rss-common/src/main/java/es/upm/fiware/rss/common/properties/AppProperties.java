@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,11 +48,11 @@ public class AppProperties {
      * Environment variable hashmap
      */
 
-    private HashMap<String, String> envTable = new HashMap<String, String>();
+    private Map<String, String> envTable = new HashMap<>();
     
     /**
      * Filename of properties.
-     nnnnnn*/
+     */
     private Properties props;
 
     /**
@@ -84,14 +85,14 @@ public class AppProperties {
      */
     
     private void associatePropsToEnv() {
-	this.envTable.add("config.aggregatorRole", System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE"));
-	this.envTable.add("config.grantedRole", System.getenv("BAE_RSS_OAUTH_CONFIG_GRANTEDROLE"));
-	this.envTable.add("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
-	this.envTable.add("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
-	this.envTable.add("database.url", System.getenv("BAE_RSS_DATABASE_URL"));
-	this.envTable.add("database.username", System.getenv("BAE_RSS_DATABASE_USERNAME"));
-	this.envTable.add("database.password", System.getenv("BAE_RSS_DATABASE_PASSWORD"));
-	this.envTable.add("database.driverClassName", System.getenv("BAE_RSS_DATABASE_DRIVERCLASSNAME"));
+	this.envTable.put("config.aggregatorRole", System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE"));
+	this.envTable.put("config.grantedRole", System.getenv("BAE_RSS_OAUTH_CONFIG_GRANTEDROLE"));
+	this.envTable.put("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
+	this.envTable.put("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
+	this.envTable.put("database.url", System.getenv("BAE_RSS_DATABASE_URL"));
+	this.envTable.put("database.username", System.getenv("BAE_RSS_DATABASE_USERNAME"));
+	this.envTable.put("database.password", System.getenv("BAE_RSS_DATABASE_PASSWORD"));
+	this.envTable.put("database.driverClassName", System.getenv("BAE_RSS_DATABASE_DRIVERCLASSNAME"));
     }
     
     /**
