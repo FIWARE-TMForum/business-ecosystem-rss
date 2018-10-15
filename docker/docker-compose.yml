@@ -23,3 +23,14 @@ services:
             - rss_db
         volumes:
             - ./rss-config:/etc/default/rss
+        environment:
+            - MYSQL_HOST=mysql
+            - MYSQL_PORT=3306
+            - BAE_RSS_DATABASE_URL=jdbc:mysql://mysql:3306/RSS
+            - BAE_RSS_DATABASE_USERNAME=root
+            - BAE_RSS_DATABASE_PASSWORD=my-secret-pw
+            - BAE_RSS_DATABASE_DRIVERCLASSNAME=com.mysql.jdbc.Driver
+            - BAE_RSS_OAUTH_CONFIG_GRANTEDROLE=Provider
+            - BAE_RSS_OAUTH_CONFIG_SELLERROLE=Seller
+            - BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE=Aggregator
+
