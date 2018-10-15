@@ -15,10 +15,13 @@ if [ ! -f /etc/default/rss/database.properties ]; then
 fi
 
 # Get MySQL info
-MYSQL_HOST=`grep -o 'database\.url=.*' /etc/default/rss/database.properties | grep -oE '//.+:' | grep -oE '[^/:]+'`
-MYSQL_PORT=`grep -o 'database\.url=.*' /etc/default/rss/database.properties | grep -oE ':[0-9]+/' | grep -oE '[0-9]+'`
+# MYSQL_HOST=`grep -o 'database\.url=.*' /etc/default/rss/database.properties | grep -oE '//.+:' | grep -oE '[^/:]+'`
+# MYSQL_PORT=`grep -o 'database\.url=.*' /etc/default/rss/database.properties | grep -oE ':[0-9]+/' | grep -oE '[0-9]+'`
+# MYSQL_HOST=$MYSQL_HOST
+# MYSQL_PORT=$MYSQL_PORT
 
 # Check if MySQL is running
+echo "testing MySQL connection..."
 exec 8<>/dev/tcp/${MYSQL_HOST}/${MYSQL_PORT}
 mysqlStatus=$?
 
