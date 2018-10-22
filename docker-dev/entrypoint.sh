@@ -44,6 +44,9 @@ exec 8>&- # close output connection
 exec 8<&- # close input connection
 
 # Deploy RSS war
+echo "Installing maven project"
+cd /business-ecosystem-rss/ && mvn install
+
 echo "Deploying WAR file..."
 asadmin deploy --force false --contextroot DSRevenueSharing --name DSRevenueSharing ./fiware-rss/target/DSRevenueSharing.war
 
