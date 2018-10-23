@@ -4,21 +4,46 @@ export PATH=$PATH:/glassfish4/glassfish/bin
 asadmin start-domain
 
 # Check if the properties files have been included
-if [ ! -f /etc/default/rss/oauth.properties ]; then
-    echo "Missing oauth.properties file"
-    exit 1
-fi
+if [ -z  ${BAE_RSS_DATABASE_URL} ]; then
+    if [ ! -f /etc/default/rss/oauth.properties ]; then
+        echo "Missing oauth.properties file"
+        exit 1
+    fi
 
-if [ ! -f /etc/default/rss/database.properties ]; then
-    echo "Missing database.properties file"
-    exit 1
+    if [ ! -f /etc/default/rss/database.properties ]; then
+        echo "Missing database.properties file"
+        exit 1
+    fi
+else
+    if [ -f /etc/default/rss/oauth.properties ]; then
+        rm /etc/default/rss/oauth.properties
+    fi
+
+    if [ -f /etc/default/rss/database.properties ]; then
+        rm /etc/default/rss/database.properties
+    fi
+
+    cp /properties/oauth.properties /etc/default/rss/oauth.properties
+    cp /properties/database.properties /etc/default/rss/database.properties
+
+    sed -i "s|\${BAE_RSS_OAUTH_CONFIG_GRANTEDROLE}|${BAE_RSS_OAUTH_CONFIG_GRANTEDROLE}|g" /etc/default/rss/oauth.properties
+    sed -i "s|\${BAE_RSS_OAUTH_CONFIG_SELLERROLE}|${BAE_RSS_OAUTH_CONFIG_SELLERROLE}|g" /etc/default/rss/oauth.properties
+    sed -i "s|\${BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE}|${BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE}|g" /etc/default/rss/oauth.properties
+
+    sed -i "s|\${BAE_RSS_DATABASE_URL}|${BAE_RSS_DATABASE_URL}|g" /etc/default/rss/database.properties
+    sed -i "s|\${BAE_RSS_DATABASE_USERNAME}|${BAE_RSS_DATABASE_USERNAME}|g" /etc/default/rss/database.properties
+    sed -i "s|\${BAE_RSS_DATABASE_PASSWORD}|${BAE_RSS_DATABASE_PASSWORD}|g" /etc/default/rss/database.properties
+    sed -i "s|\${BAE_RSS_DATABASE_DRIVERCLASSNAME}|${BAE_RSS_DATABASE_DRIVERCLASSNAME}|g" /etc/default/rss/database.properties
 fi
 
 # Get MySQL info
-# MYSQL_HOST=`grep -o 'database\.url=.*' /etc/default/rss/database.properties | grep -oE '//.+:' | grep -oE '[^/:]+'`
-# MYSQL_PORT=`grep -o 'database\.url=.*' /etc/default/rss/database.properties | grep -oE ':[0-9]+/' | grep -oE '[0-9]+'`
-# MYSQL_HOST=$MYSQL_HOST
-# MYSQL_PORT=$MYSQL_PORT
+if [ -z  ${BAE_RSS_DATABASE_URL} ]; then
+    MYSQL_HOST=`grep -o 'database\.url=.*' /etc/default/rss/database.properties | grep -oE '//.+:' | grep -oE '[^/:]+'`
+    MYSQL_PORT=`grep -o 'database\.url=.*' /etc/default/rss/database.properties | grep -oE ':[0-9]+/' | grep -oE '[0-9]+'`
+else
+    MYSQL_HOST=`echo ${BAE_RSS_DATABASE_URL} | grep -oE '//.+:' | grep -oE '[^/:]+'`
+    MYSQL_PORT=`echo ${BAE_RSS_DATABASE_URL} | grep -oE ':[0-9]+/' | grep -oE '[0-9]+'`
+fi
 
 # Check if MySQL is running
 echo "testing MySQL connection..."

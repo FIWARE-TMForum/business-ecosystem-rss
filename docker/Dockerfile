@@ -24,6 +24,7 @@ RUN mvn install -DskipTests && \
 VOLUME /etc/default/rss
 
 COPY ./entrypoint.sh /
+COPY ./properties/ /properties/
 
 EXPOSE 8080 4848 8181
 ENTRYPOINT ["/entrypoint.sh"]
