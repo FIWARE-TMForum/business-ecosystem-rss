@@ -6,7 +6,7 @@
     <artifactId>rss</artifactId>
     <packaging>pom</packaging>
     <name>Business-Ecosystem-RSS</name>
-    <version>6.4.0</version>
+    <version>7.4.0</version>
     <description></description>
 
     <organization>
@@ -20,8 +20,8 @@
         <pathToFilters>.</pathToFilters>
         <tomcat.home>/usr/share/tomcat${tomcat.version}</tomcat.home>  
         
-        <rss.version>6.4.0</rss.version>
-        <core.version>6.4.0</core.version>
+        <rss.version>7.4.0</rss.version>
+        <core.version>7.4.0</core.version>
         
         <jdk.version>1.8</jdk.version>
         <maven.version>3.2.5</maven.version>
@@ -153,6 +153,11 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.3.0</version>
             </plugin>
         </plugins>
     </build>

@@ -2,9 +2,9 @@ version: '3'
 
 services:
     rss_db:
-        image: mysql:latest
+        image: mysql:5.7
         ports:
-            - "3333:3306"
+            - "3334:3306"
         volumes:
             - ./rss-data:/var/lib/mysql
         environment:
@@ -12,7 +12,7 @@ services:
             - MYSQL_DATABASE=RSS
 
     rss:
-        image: rss
+        image: fiware/biz-ecosystem-rss:develop
         ports:
             - "9999:8080"
             - "4444:4848"
@@ -21,5 +21,17 @@ services:
             - rss_db
         depends_on:
             - rss_db
-        volumes:
-            - ./rss-config:/etc/default/rss
+        # volumes:
+        #    Used when the RSS is not configured by environment
+        #    - ./rss-config:/etc/default/rss
+        environment:
+            - MYSQL_HOST=mysql
+            - MYSQL_PORT=3306
+            - BAE_RSS_DATABASE_URL=jdbc:mysql://mysql:3306/RSS
+            - BAE_RSS_DATABASE_USERNAME=root
+            - BAE_RSS_DATABASE_PASSWORD=my-secret-pw
+            - BAE_RSS_DATABASE_DRIVERCLASSNAME=com.mysql.jdbc.Driver
+            - BAE_RSS_OAUTH_CONFIG_GRANTEDROLE=admin
+            - BAE_RSS_OAUTH_CONFIG_SELLERROLE=Seller
+            - BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE=Aggregator
+

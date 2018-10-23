@@ -95,10 +95,11 @@ public class AppProperties {
      * @return string
      */
     public String getProperty(final String key) {
-        AppProperties.logger.debug("Into getProperty()");
+        AppProperties.logger.debug("Into getProperty() with key " + key);
         if (props == null) {
             this.loadProperties();
         }
+	AppProperties.logger.debug("returning " + props.getProperty(key));
         return props.getProperty(key);
     }
 
@@ -109,15 +110,37 @@ public class AppProperties {
      * @return prop
      */
     public static Properties loadProperties(final String filename) {
-        AppProperties.logger.debug("Into AppProperties.loadProperties() " + filename);
+        AppProperties.logger.debug("Into AppProperties.loadProperties() with filename " + filename);
 
         Properties prop = new Properties();
-        try {
-            InputStream input = new FileInputStream(filename);
-            prop.load(input);
-        } catch (IOException ioe) {
-            AppProperties.logger.error("Error >>>>>>> " + ioe.getMessage(), ioe);
-        }
+
+	// OAUTH ENVIRONMENT VARIABLES
+	if (filename.equals("/etc/default/rss/oauth.properties")) {
+	    prop.setProperty("config.grantedRole", System.getenv("BAE_RSS_OAUTH_CONFIG_GRANTEDROLE"));
+	    prop.setProperty("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
+	    prop.setProperty("config.aggregatorRole", System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE"));
+	} else {
+	    prop.setProperty("database.url", System.getenv("BAE_RSS_DATABASE_URL"));
+	    prop.setProperty("database.username", System.getenv("BAE_RSS_DATABASE_USERNAME"));
+	    prop.setProperty("database.password", System.getenv("BAE_RSS_DATABASE_PASSWORD"));
+	    prop.setProperty("database.driverClassName", System.getenv("BAE_RSS_DATABASE_DRIVERCLASSNAME"));
+	}
+
+	if (prop.getProperty("config.grantedRole") == null || prop.getProperty("config.sellerRole") == null ||
+	    prop.getProperty("config.aggregatorRole") == null || prop.getProperty("database.url") == null ||
+	    prop.getProperty("database.username") == null || prop.getProperty("database.password") == null ||
+	    prop.getProperty("database.driverClassName") == null) {
+	
+	    try {
+		InputStream input = new FileInputStream(filename);
+		prop.load(input);
+	    } catch (IOException ioe) {
+		AppProperties.logger.error("Error >>>>>>> " + ioe.getMessage(), ioe);
+	    }
+	}
+	
+	AppProperties.logger.debug("-------------- config.grantedRole value: " + prop.getProperty("config.grantedRole"));
+	
         return prop;
     }
 
@@ -130,7 +153,7 @@ public class AppProperties {
      * @return string
      */
     public static String getProperty(final String filename, final String key) {
-        AppProperties.logger.debug("Into AppProperties.getProperty()");
+        AppProperties.logger.debug("Into AppProperties.getProperty() with filename " + filename + " and key " + key);
         return AppProperties.loadProperties(filename).getProperty(key);
     }
 }

@@ -6,7 +6,7 @@ Starting on version 5.4.0, you are able to run the Business API Ecosystem with D
 
 The Business API Ecosystem authenticates with the [FIWARE Lab identity manager](https://account.lab.fiware.org). In this regard, it is needed to register an application in this portal in order to acquire the OAuth2 credentials.
 
-The Business Ecosystem RSS itself does not need to know the credentials (Client Id and Client Secret) of the registered application, but it needs to know the name given to the created roles. The current image uses *admin* for the admin role and *Seller* for the seller role.
+The Business Ecosystem RSS itself does not need to know the credentials (Client Id and Client Secret) of the registered application, but it needs to know the name given to the created roles. The current image uses *Provider* for the admin role and *Seller* for the seller role.
 
 ## Automatically
 
@@ -17,9 +17,9 @@ version: '3'
 
 services:
     rss_db:
-        image: mysql:5.7
+        image: mysql:latest
         ports:
-            - "3334:3306"
+            - "3333:3306"
         volumes:
             - ./rss-data:/var/lib/mysql
         environment:
@@ -27,7 +27,7 @@ services:
             - MYSQL_DATABASE=RSS
 
     rss:
-        image: fiware/biz-ecosystem-rss
+        image: conwetlab/biz-ecosystem-rss
         ports:
             - "9999:8080"
             - "4444:4848"
@@ -36,25 +36,11 @@ services:
             - rss_db
         depends_on:
             - rss_db
-        # volumes:
-        #    Used when the RSS is not configured by environment
-        #    - ./rss-config:/etc/default/rss
-        environment:
-            - MYSQL_HOST=mysql
-            - MYSQL_PORT=3306
-            - BAE_RSS_DATABASE_URL=jdbc:mysql://mysql:3306/RSS
-            - BAE_RSS_DATABASE_USERNAME=root
-            - BAE_RSS_DATABASE_PASSWORD=my-secret-pw
-            - BAE_RSS_DATABASE_DRIVERCLASSNAME=com.mysql.jdbc.Driver
-            - BAE_RSS_OAUTH_CONFIG_GRANTEDROLE=admin
-            - BAE_RSS_OAUTH_CONFIG_SELLERROLE=Seller
-            - BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE=Aggregator
+        volumes:
+            - ./rss-config:/etc/default/rss
 ```
 
 **Note**: The provided docker-compose file is using a port schema that can be easily changed modifying the file
-
-Starting in version 7.4.0 the RSS can be configured using environment variables. In this regard, the variables
-included in the previous example override the default values included in the config files.
 
 Once you have created the file, run the following command:
 
