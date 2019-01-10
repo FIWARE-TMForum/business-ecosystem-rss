@@ -119,7 +119,9 @@ public class AppProperties {
 	    prop.setProperty("config.grantedRole", System.getenv("BAE_RSS_OAUTH_CONFIG_GRANTEDROLE"));
 	    prop.setProperty("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
 	    prop.setProperty("config.aggregatorRole", System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE"));
-	} else {
+	}
+
+	if (filename.equals("/etc/default/rss/oauth.properties")) {
 	    prop.setProperty("database.url", System.getenv("BAE_RSS_DATABASE_URL"));
 	    prop.setProperty("database.username", System.getenv("BAE_RSS_DATABASE_USERNAME"));
 	    prop.setProperty("database.password", System.getenv("BAE_RSS_DATABASE_PASSWORD"));
