@@ -121,7 +121,7 @@ public class AppProperties {
 	    prop.setProperty("config.aggregatorRole", System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE"));
 	}
 
-	if (filename.equals("/etc/default/rss/oauth.properties")) {
+	if (filename.equals("/etc/default/rss/database.properties")) {
 	    prop.setProperty("database.url", System.getenv("BAE_RSS_DATABASE_URL"));
 	    prop.setProperty("database.username", System.getenv("BAE_RSS_DATABASE_USERNAME"));
 	    prop.setProperty("database.password", System.getenv("BAE_RSS_DATABASE_PASSWORD"));
