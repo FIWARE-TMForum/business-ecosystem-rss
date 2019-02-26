@@ -4,7 +4,7 @@ MAINTAINER CoNWeT Lab. Universidad Politécnica de Madrid
 
 ENV VERSION develop
 
-RUN apt-get update && apt-get install -y python2.7 git maven python-pip mysql-client openjdk-8-jdk wget unzip && \
+RUN apt-get update && apt-get install -y python2.7 git maven python-pip mysql-client openjdk-8-jdk wget unzip git && \
     pip install sh && \
     wget http://download.java.net/glassfish/4.1/release/glassfish-4.1.zip && \
     unzip glassfish-4.1.zip && \
