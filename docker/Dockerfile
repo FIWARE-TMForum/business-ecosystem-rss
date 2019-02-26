@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 MAINTAINER CoNWeT Lab. Universidad Politécnica de Madrid
 
-ENV VERSION master
+ENV VERSION develop
 
 RUN apt-get update && apt-get install -y python2.7 git maven python-pip mysql-client openjdk-8-jdk wget unzip git && \
     pip install sh && \
