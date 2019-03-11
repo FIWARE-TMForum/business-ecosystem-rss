@@ -114,35 +114,52 @@ public class AppProperties {
 
         Properties prop = new Properties();
 
-	// OAUTH ENVIRONMENT VARIABLES
-	if (filename.equals("/etc/default/rss/oauth.properties")) {
-	    prop.setProperty("config.grantedRole", System.getenv("BAE_RSS_OAUTH_CONFIG_GRANTEDROLE"));
-	    prop.setProperty("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
-	    prop.setProperty("config.aggregatorRole", System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE"));
-	}
+	    // OAUTH ENVIRONMENT VARIABLES
+	    if (filename.equals("/etc/default/rss/oauth.properties")) {
+            if (System.getenv("BAE_RSS_OAUTH_CONFIG_GRANTEDROLE") != null) {
+                prop.setProperty("config.grantedRole", System.getenv("BAE_RSS_OAUTH_CONFIG_GRANTEDROLE"));
+            }
 
-	if (filename.equals("/etc/default/rss/database.properties")) {
-	    prop.setProperty("database.url", System.getenv("BAE_RSS_DATABASE_URL"));
-	    prop.setProperty("database.username", System.getenv("BAE_RSS_DATABASE_USERNAME"));
-	    prop.setProperty("database.password", System.getenv("BAE_RSS_DATABASE_PASSWORD"));
-	    prop.setProperty("database.driverClassName", System.getenv("BAE_RSS_DATABASE_DRIVERCLASSNAME"));
-	}
+            if (System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE") != null) {
+                prop.setProperty("config.sellerRole", System.getenv("BAE_RSS_OAUTH_CONFIG_SELLERROLE"));
+            }
 
-	if (prop.getProperty("config.grantedRole") == null || prop.getProperty("config.sellerRole") == null ||
-	    prop.getProperty("config.aggregatorRole") == null || prop.getProperty("database.url") == null ||
-	    prop.getProperty("database.username") == null || prop.getProperty("database.password") == null ||
-	    prop.getProperty("database.driverClassName") == null) {
-	
-	    try {
-		InputStream input = new FileInputStream(filename);
-		prop.load(input);
-	    } catch (IOException ioe) {
-		AppProperties.logger.error("Error >>>>>>> " + ioe.getMessage(), ioe);
+            if (System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE") != null) {
+                prop.setProperty("config.aggregatorRole", System.getenv("BAE_RSS_OAUTH_CONFIG_AGGREGATORROLE"));
+            }
 	    }
-	}
+
+        // DATABASE ENV PROP
+	    if (filename.equals("/etc/default/rss/database.properties")) {
+            if (System.getenv("BAE_RSS_DATABASE_URL") != null) {
+                prop.setProperty("database.url", System.getenv("BAE_RSS_DATABASE_URL"));
+            }
+
+            if (System.getenv("BAE_RSS_DATABASE_USERNAME") != null) {
+                prop.setProperty("database.username", System.getenv("BAE_RSS_DATABASE_USERNAME"));
+            }
+
+            if (System.getenv("BAE_RSS_DATABASE_PASSWORD") != null) {
+                prop.setProperty("database.password", System.getenv("BAE_RSS_DATABASE_PASSWORD"));
+            }
+
+            if (System.getenv("BAE_RSS_DATABASE_DRIVERCLASSNAME") != null) {
+                prop.setProperty("database.driverClassName", System.getenv("BAE_RSS_DATABASE_DRIVERCLASSNAME"));
+            }
+	    }
+
+	    if (prop.getProperty("config.grantedRole") == null || prop.getProperty("config.sellerRole") == null ||
+	        prop.getProperty("config.aggregatorRole") == null || prop.getProperty("database.url") == null ||
+	        prop.getProperty("database.username") == null || prop.getProperty("database.password") == null ||
+	        prop.getProperty("database.driverClassName") == null) {
 	
-	AppProperties.logger.debug("-------------- config.grantedRole value: " + prop.getProperty("config.grantedRole"));
-	
+	        try {
+		        InputStream input = new FileInputStream(filename);
+		        prop.load(input);
+	        } catch (IOException ioe) {
+		        AppProperties.logger.error("Error >>>>>>> " + ioe.getMessage(), ioe);
+	        }
+	    }
         return prop;
     }
 
