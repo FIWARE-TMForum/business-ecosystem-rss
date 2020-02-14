@@ -110,6 +110,20 @@ public class FixedPercentageProcessorTest {
     }
 
     @Test
+    public void throwsRssExceptionRSModelAggregatorValueNegative() {
+        model.setAggregatorShare(new BigDecimal("-1"));
+        testValidaateModelException(
+                "Invalid parameter value: percentage must be greater or equal than 0");
+    }
+
+    @Test
+    public void throwsRssExceptionRSModelAggregatorValueGTHundred() {
+        model.setAggregatorShare(new BigDecimal("101"));
+        testValidaateModelException(
+            "Invalid parameter value: percentage must be equal or lower than 100");
+    }
+
+    @Test
     public void throwsRssExceptionValueGreaterThanHundred() {
         model.setOwnerValue(new BigDecimal("101"));
         testValidaateModelException(

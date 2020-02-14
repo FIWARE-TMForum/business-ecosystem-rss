@@ -31,6 +31,16 @@ import java.util.List;
  */
 public class FixedPercentageProcessor implements AlgorithmProcessor {
 
+    private void validateAggregatorPercent(BigDecimal value) throws RSSException {
+        if (value.compareTo(BigDecimal.ZERO) < 0) {
+            String[] args = {"percentage must be greater or equal than 0"};
+            throw new RSSException(UNICAExceptionType.INVALID_INPUT_VALUE, args);
+        } else if (value.compareTo(BigDecimal.valueOf(100)) > 0) {
+            String[] args = {"percentage must be equal or lower than 100"};
+            throw new RSSException(UNICAExceptionType.INVALID_INPUT_VALUE, args);
+        }
+    }
+
     private void validatePercent(BigDecimal value) throws RSSException{
         if (value.compareTo(BigDecimal.ZERO) <= 0) {
             String[] args = {"percentage must be greater than 0"};
@@ -56,7 +66,7 @@ public class FixedPercentageProcessor implements AlgorithmProcessor {
         BigDecimal accumulatedValue;
 
         // Validate values
-        this.validatePercent(model.getAggregatorValue());
+        this.validateAggregatorPercent(model.getAggregatorValue());
         accumulatedValue = model.getAggregatorValue();
 
         this.validatePercent(model.getOwnerValue());
