@@ -1,6 +1,6 @@
 FROM ubuntu:16.04
 
-MAINTAINER CoNWeT Lab. Universidad Politécnica de Madrid
+LABEL MAINTAINER="Future Internet Consulting and Development Solutions S.L."
 
 ENV VERSION master
 
